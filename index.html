@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JS Code Matrix</title>
+	<style>
+		body {
+			margin: 0;
+			overflow: hidden;
+			background: #000;
+		}
+		.letter {
+			color: #0f0;
+			font-size: 10px;
+			font-family: Courier;
+			position: absolute;
+			top: 0;
+			left: 0;
+			background: transparent;
+		}
+	</style>
+</head>
+<body>
+	<script>
+		// JavaScript code here
+		// Create a variable to store the canvas element
+		let canvas = document.createElement('canvas');
+		document.body.appendChild(canvas);
+		let ctx = canvas.getContext('2d');
+
+		// Set the canvas size to the size of the window
+		ctx.canvas.width = window.innerWidth;
+		ctx.canvas.height = window.innerHeight;
+
+		// Create an array to store the characters
+		let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()'.split('');
+		let font_size = 10;
+		let columns = ctx.canvas.width/font_size;  // Number of columns for the rain
+		// An array of drops - one per column
+		let drops = [];
+		// x below is the x coordinate
+		// 1 = y co-ordinate of the drop(same for every drop initially)
+		for(let x = 0; x < columns; x++)
+			drops[x] = 1; 
+
+		// Drawing the characters
+		function draw()
+		{
+			// Black BG for the canvas
+			// translucent BG to show trail
+			ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+			ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+			
+			ctx.fillStyle = "#0F0"; //green text
+			ctx.font = font_size + "px arial";
+			//Looping over drops
+			for(let i = 0; i < drops.length; i++)
+			{
+				// a random chinese character to print
+				let text = characters[Math.floor(Math.random()*characters.length)];
+				//x = i*font_size, y = value of drops[i]*font_size
+				ctx.fillText(text, i*font_size, drops[i]*font_size);
+				
+				//sending the drop back to the top randomly after it has crossed the screen
+				//adding a randomness to the reset to make the drops scattered on the Y axis
+				if(drops[i]*font_size > ctx.canvas.height && Math.random() > 0.975)
+					drops[i] = 0;
+				
+				//incrementing Y coordinate
+				drops[i]++;
+			}
+		}
+
+		setInterval(draw, 33);
+	</script>
+</body>
+</html>
